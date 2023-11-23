@@ -30,20 +30,23 @@ const botName = "ZeithBot";
   io.adapter(createAdapter(pubClient, subClient));
 })();
 
-process.on('uncaughtException', function (err) {
-    console.log(err);
-}); 
+process.on("uncaughtException", function (err) {
+  console.log(err);
+});
 
 // Run when client connects
 io.on("connection", (socket) => {
   console.log(io.of("/").adapter);
-  socket.on("joinRoom", ({ username, password, room }) => {
-    const user = userJoin(socket.id, username, password, room);
+  socket.on("joinRoom", ({ username, room }) => {
+    const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
 
     // Welcome current user
-    socket.emit("message", formatMessage(botName, "Welcome to Zeith Private Chat"));
+    socket.emit(
+      "message",
+      formatMessage(botName, "Welcome to Zeith Private Chat")
+    );
 
     // Broadcast when a user connects
     socket.broadcast
